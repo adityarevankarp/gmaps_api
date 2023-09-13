@@ -7,7 +7,7 @@ import AdminMap from './components/AdminMap'
 function App() {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: REACT_APP_GOOGLE_MAPS_KEY,
-    libraries: [],
+    
   });
 
   if (!isLoaded) return <div>Loading...</div>;
@@ -85,7 +85,7 @@ function Map() {
       </GoogleMap>
       <button onClick={handleLogFinalLocation}>getfinallocation</button>
       <button>GoToAdminMap</button>
-      <AdminMap/>
+      <AdminMap userLocation={currentLocation}/>
     </>
   );
 }
