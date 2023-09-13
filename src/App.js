@@ -2,7 +2,8 @@ import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import "./App.css";
 
 import { REACT_APP_GOOGLE_MAPS_KEY } from "./key";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import AdminMap from './components/AdminMap'
 function App() {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: REACT_APP_GOOGLE_MAPS_KEY,
@@ -18,16 +19,7 @@ function App() {
   );
 }
 function Map() {
-  // const [curLat, setCurLat] = useState('');
-  // const [curLng, setCurLng] = useState('');
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition((position) => {
-
-  //     setCurLat(position.coords.latitude);
-  //     setCurLng(position.coords.longitude);
-  //     console.log(curLat,curLng);
-  //   })
-  // }, [])
+  
   const [currentLocation, setCurrentLocation] = useState(null);
   const [finalLocation, setFinalLocation] = useState(null);
   const [markers, setMarkers] = useState([]);
@@ -40,6 +32,7 @@ function Map() {
         };
         setCurrentLocation(userLocation);
         setMarkers([userLocation]);
+        console.log(userLocation)
       },
       (error) => {
         console.error("Error getting user's location:", error);
@@ -48,7 +41,7 @@ function Map() {
   }, []);
 
   const handleMapClick = (mapsMouseEvent) => {
-    if (markers.length == 0) {
+    if (markers.length === 0) {
       const newMarker = {
         lat: mapsMouseEvent.latLng.lat(),
         lng: mapsMouseEvent.latLng.lng(),
@@ -91,6 +84,8 @@ function Map() {
         ))}
       </GoogleMap>
       <button onClick={handleLogFinalLocation}>getfinallocation</button>
+      <button>GoToAdminMap</button>
+      <AdminMap/>
     </>
   );
 }
