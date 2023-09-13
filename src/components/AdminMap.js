@@ -77,7 +77,14 @@ function Map(
         ...location,
         type: "policeStation",
       })),
-    ];
+      props.userLocation && {
+        lat: props.userLocation.lat,
+        lng: props.userLocation.lng,
+        type: "userLocation", // Add a type for the user's location
+      },
+    ].filter(Boolean);
+      
+    
 
     // Update markers only when the locations change
     setMarkers(allLocations);
@@ -110,7 +117,7 @@ function Map(
   return (
     <>
       <GoogleMap
-        zoom={13}
+        zoom={15}
         center={center}
         mapContainerClassName="map-container"
       >
