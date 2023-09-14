@@ -58,6 +58,7 @@ function Map({
 
   const [directions, setDirections] = useState(null);
   const [showDirections, setShowDirections] = useState(false);
+  const [displayType, setDisplayType] = useState("all");
 
   const center = { lat: 12.9697, lng: 77.5771 };
 
@@ -83,15 +84,20 @@ function Map({
         type: "default",
       },
     ];
-
-    // Update markers only when the locations change
-    setMarkers(allLocations);
-  }, [
-    hospitalLocations,
-    fireStationLocations,
-    policeStationLocations,
-    defaultMarker,
-  ]);
+  
+    // Filter markers based on the displayType
+    if (displayType === "hospital") {
+      setMarkers(allLocations.filter((marker) => marker.type === "hospital"));
+    } else if (displayType === "fireStation") {
+      setMarkers(allLocations.filter((marker) => marker.type === "fireStation"));
+    } else if (displayType === "policeStation") {
+      setMarkers(
+        allLocations.filter((marker) => marker.type === "policeStation")
+      );
+    } else {
+      setMarkers(allLocations);
+    }
+  }, [hospitalLocations, fireStationLocations, policeStationLocations, defaultMarker, displayType]);
 
   const hospitalIcon = {
     url: "https://i.ibb.co/PjDps7c/hospital.png",
@@ -147,6 +153,16 @@ function Map({
   
   return (
     <>
+    <div className="button-container">
+        <button onClick={() => setDisplayType("hospital")}>Hospital</button>
+        <button onClick={() => setDisplayType("fireStation")}>
+          Fire Station
+        </button>
+        <button onClick={() => setDisplayType("policeStation")}>
+          Police Station
+        </button>
+        <button onClick={() => setDisplayType("all")}>All</button>
+      </div>
       <GoogleMap
         zoom={13}
         center={center}
