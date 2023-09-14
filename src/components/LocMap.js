@@ -97,9 +97,9 @@ function Map() {
         </GoogleMap>
         <button onClick={handleLogFinalLocation}>getfinallocation</button>
         <Link to="/admin-map" onClick={handleLogFinalLocation}>GoToAdminMap</Link> {/* Use Link to navigate */}
-
+        <Link to="/final-map" >GoToFinalMap</Link>
         
-         {<AdminMap finalLocation={finalLocation}/>}
+         
           
       </>
     );
