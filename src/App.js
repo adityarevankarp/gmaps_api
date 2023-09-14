@@ -1,6 +1,6 @@
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import "./App.css";
-
+import { Link } from "react-router-dom";
 import { REACT_APP_GOOGLE_MAPS_KEY } from "./key";
 import { useEffect, useState } from "react";
 import AdminMap from './components/AdminMap'
@@ -32,7 +32,8 @@ function Map() {
         };
         setCurrentLocation(userLocation);
         setMarkers([userLocation]);
-        console.log(userLocation)
+        setFinalLocation(userLocation);
+        console.log({userLocation});
       },
       (error) => {
         console.error("Error getting user's location:", error);
@@ -65,6 +66,7 @@ function Map() {
 
   const handleLogFinalLocation = () => {
     console.log("Final Location:", finalLocation);
+    setFinalLocation(finalLocation); // Update the final location state
   };
   return (
     <>
@@ -84,8 +86,8 @@ function Map() {
         ))}
       </GoogleMap>
       <button onClick={handleLogFinalLocation}>getfinallocation</button>
-      <button>GoToAdminMap</button>
-      <AdminMap userLocation={currentLocation}/>
+      <Link to="/admin-map">GoToAdminMap</Link> {/* Use Link to navigate */}
+      
     </>
   );
 }
