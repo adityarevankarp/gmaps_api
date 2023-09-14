@@ -24,43 +24,29 @@ function AdminMap(props) {
   ];
 
   if (!isLoaded) return <div>Loading...</div>;
-
+  console.log("Final Location in AdminMap:", props?.finalLocationOfUser);
   return (
     <div>
       <Map
         hospitalLocations={hospitalLocations}
         fireStationLocations={fireStationLocations}
         policeStationLocations={policeStationLocations}
-        finalLocation={props.userLocation}
+        
       />
+      {/* <h1>{props.finalLocation}</h1> */}
     </div>
   );
 }
 
 function Map(
+
   { hospitalLocations, fireStationLocations, policeStationLocations },
-  props
+
 ) {
   const [markers, setMarkers] = useState([]);
-
+  
   const center = { lat: 12.9716, lng: 77.5946 };
-  const iconMapping = {
-    hospital: {
-      strokeOpacity: 1,
-      scale: 4,
-      fillColor: "red",
-    },
-    fireStation: {
-      strokeOpacity: 1,
-      scale: 4,
-      fillColor: "orange",
-    },
-    policeStation: {
-      strokeOpacity: 1,
-      scale: 4,
-      fillColor: "blue",
-    },
-  };
+  
 
   useEffect(() => {
     // Combine all location arrays into one
@@ -77,13 +63,8 @@ function Map(
         ...location,
         type: "policeStation",
       })),
-      props.userLocation && {
-        lat: props.userLocation.lat,
-        lng: props.userLocation.lng,
-        type: "userLocation", // Add a type for the user's location
-      },
-    ].filter(Boolean);
       
+    ]
     
 
     // Update markers only when the locations change
