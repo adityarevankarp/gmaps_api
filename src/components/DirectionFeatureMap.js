@@ -1,6 +1,7 @@
 import { GoogleMap, Marker, useLoadScript, DirectionsService, DirectionsRenderer } from "@react-google-maps/api";
 
 
+
 import { REACT_APP_GOOGLE_MAPS_KEY } from "../key";
 import { useEffect, useState } from "react";
 import "./AdminMap.css";
@@ -54,9 +55,9 @@ function Map({
   defaultMarker,
 }) {
   const [markers, setMarkers] = useState([]);
-  const [directionsResponse, setDirectionsResponse] = useState(null);
-  const [directionsRenderer, setDirectionsRenderer] = useState(null);
-    
+
+  const [directions, setDirections] = useState(null);
+  const [showDirections, setShowDirections] = useState(false);
 
   const center = { lat: 12.9697, lng: 77.5771 };
 
@@ -123,37 +124,27 @@ function Map({
     anchor: new window.google.maps.Point(16, 16),
   };
 
-  
-  const handleDirectionsRequest = () => {
-    if (markers.length === 0) return; // No markers to calculate directions from
-
-    // Create a DirectionsService instance
+  const calculateDirections = (serviceLocation) => {
     const directionsService = new window.google.maps.DirectionsService();
-
-    // Request directions from the first marker to the default marker
+  
     directionsService.route(
       {
-        origin: markers[0], // First marker
-        destination: defaultMarker,
-        travelMode: window.google.maps.TravelMode.DRIVING, // You can change the travel mode as needed
+        origin: new window.google.maps.LatLng(serviceLocation.lat, serviceLocation.lng),
+        destination: new window.google.maps.LatLng(defaultMarker.lat, defaultMarker.lng),
+        travelMode: 'DRIVING', // You can change the travel mode as needed
       },
       (result, status) => {
-        if (status === window.google.maps.DirectionsStatus.OK) {
-          // Directions request was successful
-          setDirectionsResponse(result);
-
-          // Create a DirectionsRenderer instance to display the route on the map
-          if (!directionsRenderer) {
-            const newDirectionsRenderer = new window.google.maps.DirectionsRenderer();
-            setDirectionsRenderer(newDirectionsRenderer);
-          }
+        if (status === 'OK') {
+          setDirections(result);
+          setShowDirections(true);
         } else {
-          // Directions request failed
-          console.error("Directions request failed with status:", status);
+          console.error(`Directions request failed due to ${status}`);
         }
       }
     );
   };
+  
+  
   return (
     <>
       <GoogleMap
@@ -177,19 +168,23 @@ function Map({
                 ? policeStationIcon
                 : defaultMarkerIcon
             }
-            
+            onClick={() => calculateDirections(marker)}
           />
           
         ))}
-        {directionsRenderer && (
-          <DirectionsRenderer
-            directions={directionsResponse}
-            options={{ suppressMarkers: true }} // Hide the default markers along the route
-            map={null} // To prevent rendering the directions on the map initially
-          />
-        )}
+         {showDirections && directions && (
+    <DirectionsRenderer
+      directions={directions}
+      options={{
+        polylineOptions: {
+          strokeColor: "white", // You can customize the route color
+        },
+      }}
+    />
+  )}
+       
       </GoogleMap>
-      <button onClick={handleDirectionsRequest}>Show Directions</button>
+     
          
       
     </>
